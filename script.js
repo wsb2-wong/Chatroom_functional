@@ -656,30 +656,46 @@ BlobScene.prototype.loop = function() {
 
   if (this.activeEmotion === 0) {
     // 🌿 breathing - oscillating scale on my blob
+    // changed: 1 blob moving -> 2 blobs moving (same loop value for both)
     this.breatheT += 0.04;
     var breathSc = 1.0 + Math.sin(this.breatheT) * 0.12;
-    if (this.myBlobIndex === 1) { scaleA = breathSc; } else { scaleB = breathSc; }
+    // original idea (commented out): only ONE blob changes size
+    // if (this.myBlobIndex === 1) { scaleA = breathSc; } else { scaleB = breathSc; }
+    scaleA = breathSc;
+    scaleB = breathSc;
 
   } else if (this.activeEmotion === 1) {
     // ☀️ gentle bounce
+    // changed: 1 blob moving -> 2 blobs moving (same bounce offset for both)
     this.bounceVel += 0.18;
     var bOff = this.bounceVel;
     if (this.bounceVel > 4) { this.bounceVel = -3.2; }
-    if (this.myBlobIndex === 1) { offAy = bOff; } else { offBy = bOff; }
+    // original idea (commented out): only ONE blob bounces
+    // if (this.myBlobIndex === 1) { offAy = bOff; } else { offBy = bOff; }
+    offAy = bOff;
+    offBy = bOff;
 
   } else if (this.activeEmotion === 2) {
     // 💕 grow + drift toward centre
+    // changed: 1 blob moving -> 2 blobs moving (both blobs go toward the middle)
     this.emotionPhase += 0.008;
     var growSc = Math.min(1.35, 1.0 + this.emotionPhase * 0.4);
-    if (this.myBlobIndex === 1) {
-      scaleA = growSc;
-      offAx = (w / 2 - bxA) * 0.03;
-      offAy = (h / 2 - byA) * 0.03;
-    } else {
-      scaleB = growSc;
-      offBx = (w / 2 - bxB) * 0.03;
-      offBy = (h / 2 - byB) * 0.03;
-    }
+    // original idea (commented out): only ONE blob grows and drifts
+    // if (this.myBlobIndex === 1) {
+    //   scaleA = growSc;
+    //   offAx = (w / 2 - bxA) * 0.03;
+    //   offAy = (h / 2 - byA) * 0.03;
+    // } else {
+    //   scaleB = growSc;
+    //   offBx = (w / 2 - bxB) * 0.03;
+    //   offBy = (h / 2 - byB) * 0.03;
+    // }
+    scaleA = growSc;
+    scaleB = growSc;
+    offAx = (w / 2 - bxA) * 0.03;
+    offAy = (h / 2 - byA) * 0.03;
+    offBx = (w / 2 - bxB) * 0.03;
+    offBy = (h / 2 - byB) * 0.03;
     if (this.emotionT > 4.0) { this.activeEmotion = -1; }
 
   } else if (this.activeEmotion === 3) {
@@ -713,18 +729,26 @@ BlobScene.prototype.loop = function() {
 
   } else if (this.activeEmotion === 4) {
     // 🌙 quiet - shrink, slow, cool tint
+    // changed: cool tint 0.4 -> 0, and both blobs small + tiny movement (calmer)
     this.emotionPhase += 0.01;
-    var quietSc = 0.65 + Math.sin(this.emotionPhase * 0.5) * 0.04;
-    this.coolBlend = 0.4;
-    if (this.myBlobIndex === 1) {
-      scaleA = quietSc;
-      offAx = Math.sin(this.t * 0.3) * 1.5;
-      offAy = Math.cos(this.t * 0.25) * 1.0;
-    } else {
-      scaleB = quietSc;
-      offBx = Math.sin(this.t * 0.3) * 1.5;
-      offBy = Math.cos(this.t * 0.25) * 1.0;
-    }
+    var quietSc = 0.58 + Math.sin(this.emotionPhase * 0.5) * 0.02;
+    this.coolBlend = 0;
+    // original idea (commented out): only ONE blob gets the quiet effect
+    // if (this.myBlobIndex === 1) {
+    //   scaleA = quietSc;
+    //   offAx = Math.sin(this.t * 0.3) * 1.5;
+    //   offAy = Math.cos(this.t * 0.25) * 1.0;
+    // } else {
+    //   scaleB = quietSc;
+    //   offBx = Math.sin(this.t * 0.3) * 1.5;
+    //   offBy = Math.cos(this.t * 0.25) * 1.0;
+    // }
+    scaleA = quietSc;
+    scaleB = quietSc;
+    offAx = Math.sin(this.t * 0.25) * 0.8;
+    offAy = Math.cos(this.t * 0.22) * 0.6;
+    offBx = Math.sin(this.t * 0.25) * 0.8;
+    offBy = Math.cos(this.t * 0.22) * 0.6;
     if (this.emotionT > 5.0) { this.activeEmotion = -1; this.coolBlend = 0; }
 
   } else if (this.activeEmotion === 5) {
@@ -782,7 +806,7 @@ appState.blobScenes.device1 = new BlobScene(
 // Device 2: green blob is "my" blob (myBlobIndex = 2), purple is partner
 appState.blobScenes.device2 = new BlobScene(
   screens.device2.stage.querySelector(".blob-canvas"),
-  ["#d1a7e0b4", "#d76dcbbc", "#53dabbb7", "#a8eaf1ae"],
+  ["#ccabd8ab", "#d76dcbb1", "#86e3cd99", "#a8eaf1a7"],
   2
 );
 

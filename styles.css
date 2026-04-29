@@ -1,6 +1,7 @@
 /* Set all the colour platte at the beginning rather than inside each section */
 :root {
   --tealblue: #86E3CE;
+  --greenblue: #86E3CE;
   --partner-white: #FFFFFF;
   --bg-yellow: #FFFAEE;
   --purple: #CCABD8;
