@@ -8,31 +8,32 @@ var emotionData = [
   { emoji: "✨", label: "Thinking of you" },
   { emoji: "🌙", label: "Just a quiet moment" },
   { emoji: "🫧", label: "A little heavy right now" }
-];
+]; //add all emojis and label of each emotion status, the main idea of the chatroom
 
-// shared app state
+// store everything that changes while the app is running here which do not have to make a bunch of separate global variables
 var appState = {
-  activeInput: null,
-  typingTimers: { device1: null, device2: null },
-  blobScenes: {},
-  keyboardMode: { device1: "letters", device2: "letters" },
-  emotion: { device1: null, device2: null }
+  activeInput: null,                                       
+  typingTimers: { device1: null, device2: null },          // setTimeout ids - used to delay showing the emotion chips
+  blobScenes: {},                                          // the two canvas blob animations, they will be filled in later
+  keyboardMode: { device1: "letters", device2: "letters" },// two phone screen are seperate and do not affect each other
+  emotion: { device1: null, device2: null }                // last emotion sent from each phone
 };
 
-// avatar image
-var avatarPath = "/Users/ivanleung/.cursor/projects/Users-ivanleung-Desktop-chatroom-artifact/assets/image-b90ab528-d45e-453f-94fa-d41aac3c14e3.png";
+// avatar = user profile picture, the circle icon
+var avatarPath = "assets/avatar.png";
 
-// DOM refs for both devices
+
+// Grab everything once at the start and put it into a nested object, two device phone screen
 var screens = {
   device1: {
-    input: document.getElementById("input1"),
-    send: document.getElementById("send1"),
-    record: document.getElementById("record1"),
-    messages: document.getElementById("messages1"),
-    emotionRow: document.getElementById("emotionRow1"),
-    keyboard: document.getElementById("keyboard1"),
-    timeLabel: document.getElementById("timeLabel1"),
-    stage: document.getElementById("stage1")
+    input: document.getElementById("input1"),         // the text box at the bottom
+    send: document.getElementById("send1"),           // send button (the arrow)
+    record: document.getElementById("record1"),       // mic button
+    messages: document.getElementById("messages1"),   // the scrolling chat area
+    emotionRow: document.getElementById("emotionRow1"),// row of 6 emoji emotions chips that pops up after typing
+    keyboard: document.getElementById("keyboard1"),   // fake on-screen keyboard
+    timeLabel: document.getElementById("timeLabel1"), // Data of "Amsterdam pm and °C", Environmental information visible
+    stage: document.getElementById("stage1")          // the area where the blob animation lives after pressing chips
   },
   device2: {
     input: document.getElementById("input2"),
@@ -41,32 +42,40 @@ var screens = {
     messages: document.getElementById("messages2"),
     emotionRow: document.getElementById("emotionRow2"),
     keyboard: document.getElementById("keyboard2"),
-    timeLabel: document.getElementById("timeLabel2"),
+    timeLabel: document.getElementById("timeLabel2"), // Data of "Edinburgh pm and °C"
     stage: document.getElementById("stage2")
   }
 };
 
-// avatar with fallback if image 404s
+// avatar, if the image fails to load, swap it out for a plain circle placeholder
 var girlAvatar = document.getElementById("girlAvatar");
-girlAvatar.src = avatarPath;
-girlAvatar.onerror = function() {
-  var ph = document.createElement("div");
-  ph.className = "avatar-wrap avatar-letter";
-  ph.textContent = "🔋";
-  girlAvatar.parentNode.replaceChild(ph, girlAvatar);
-};
+if (girlAvatar) {
+  girlAvatar.src = avatarPath;
+  girlAvatar.onerror = function() {
+    var fallback = document.createElement("div");
+    fallback.className = "avatar-wrap avatar-letter";
+    girlAvatar.parentNode.replaceChild(fallback, girlAvatar);
+  };
+}
 
-// render message history on both screens
+// redraw the chat bubbles on BOTH phones.
+// I do both at once because device1 and device2 should always
+// show the same conversation - just from each side's point of view
+// (your own messages line up on the right, the other person's on the left).
 function drawMessages() {
   ["device1", "device2"].forEach(function(viewer) {
     var box = screens[viewer].messages;
-    box.innerHTML = "";
+    box.innerHTML = "";  // clear out the old bubbles before re-rendering
     msgLog.forEach(function(entry) {
       var bubble = document.createElement("div");
+      // if this message was sent by the phone we're currently looking at,
+      // give it the "self" style (right side, colour A);
+      // otherwise give it the "other" style (left side, colour B)
       bubble.className = "bubble " + (entry.from === viewer ? "self" : "other");
       bubble.textContent = entry.text;
       box.appendChild(bubble);
     });
+    // auto-scroll to the newest message at the bottom
     box.scrollTop = box.scrollHeight;
   });
 }
@@ -742,7 +751,7 @@ BlobScene.prototype.loop = function() {
   var finalR1 = this.baseR * scaleA;
   var finalR2 = this.baseR * scaleB;
 
-  // cool tint
+  // cool tint which matches with a deeper mood
   var col0 = this.pal[0], col1 = this.pal[1], col2 = this.pal[2], col3 = this.pal[3];
   if (this.coolBlend > 0) {
     col0 = lerpHex(this.pal[0], "#9b7fbf", this.coolBlend);
@@ -766,14 +775,14 @@ BlobScene.prototype.loop = function() {
 // Device 1: purple blob is "my" blob (myBlobIndex = 1), green is partner
 appState.blobScenes.device1 = new BlobScene(
   screens.device1.stage.querySelector(".blob-canvas"),
-  ["#D1A7E0", "#D76DCA", "#53DABB", "#A8EAF1"],
+  ["#d1a7e0b4", "#d76dcbbc", "#53dabbb7", "#a8eaf1ae"],
   1
 );
 
 // Device 2: green blob is "my" blob (myBlobIndex = 2), purple is partner
 appState.blobScenes.device2 = new BlobScene(
   screens.device2.stage.querySelector(".blob-canvas"),
-  ["#CCABD8", "#D76DCA", "#86E3CE", "#A8EAF1"],
+  ["#ccabd8ab", "#d76dcbb1", "#86e3cd99", "#a8eaf1a7"],
   2
 );
 

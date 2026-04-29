@@ -1,9 +1,10 @@
+/* Set all the colour platte at the beginning rather than inside each section */
 :root {
-  --greenblue: #86e3ce;
-  --partner-white: #ffffff;
-  --bg-yellow: #ffdd94;
-  --purple: #ccabd8;
-  --text: #3d3d3d;
+  --greenblue: #86E3CE;
+  --partner-white: #FFFFFF;
+  --bg-yellow: #FFFAEE;
+  --purple: #CCABD8;
+  --text: #3D3D3D;
 }
 
 * { box-sizing: border-box; }
@@ -11,13 +12,14 @@
 body {
   margin: 0;
   min-height: 100vh;
-  font-family: "DM Sans", Arial, sans-serif;
+  font-family: "DM Sans", Arial, sans-serif; /* DM Sans as the body text */
   background: linear-gradient(180deg, #ffffff 0%, #f7f7f7 100%);
-  color: var(--text);
+  color: var(--text);/* browse the top */
   position: relative;
   overflow-x: hidden;
 }
 
+/* faint floating gradient wash at the background which fits the style of AURA, Calm mood */
 body::before {
   content: "";
   position: fixed;
@@ -25,9 +27,9 @@ body::before {
   z-index: -1;
   pointer-events: none;
   background:
-    radial-gradient(circle at 16% 20%, rgba(134, 227, 206, 0.28) 0%, rgba(255, 255, 255, 0) 40%),
-    radial-gradient(circle at 83% 24%, rgba(255, 221, 148, 0.26) 0%, rgba(255, 255, 255, 0) 42%),
-    radial-gradient(circle at 52% 80%, rgba(204, 171, 216, 0.24) 0%, rgba(255, 255, 255, 0) 44%);
+    radial-gradient(circle at 16% 20%, rgba(134, 227, 206, 0.3) 0%, rgba(255, 255, 255, 0) 40%), /* style of blobs, aura, radial */
+    radial-gradient(circle at 83% 24%, rgba(255, 221, 148, 0.4) 0%, rgba(255, 255, 255, 0) 42%),
+    radial-gradient(circle at 52% 80%, rgba(204, 171, 216, 0.4) 0%, rgba(255, 255, 255, 0) 44%);
   transform: translate3d(0, 0, 0) scale(1.03);
   animation: pageGradientFloat 22s ease-in-out infinite alternate;
 }
@@ -42,17 +44,18 @@ body::before {
 
 .view-controls {
   display: flex;
-  justify-content: center;
+  justify-content: center; /* Bootstrap concept Year1 , centered everything*/
   gap: 10px;
   margin-bottom: 14px;
 }
 
+/* Style in the button at top of choosing the device*/
 .view-btn, .device-tag {
-  border: 1px solid #d2d2d2;
+  border: 1px solid #6D6D6D;
   border-radius: 10px;
-  background: #fff;
+  background: #FFFAEE;
   padding: 8px 12px;
-  font-size: 13px;
+  font-size: 16px;
   cursor: pointer;
   transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
 }
@@ -87,7 +90,7 @@ body::before {
   width: 340px;
   height: 720px;
   border-radius: 28px;
-  border: 4px solid #181818;
+  border: 4px solid #3d3d3d;
   overflow: hidden;
   background: #f6f6f6;
   position: relative;
@@ -101,7 +104,7 @@ body::before {
   width: 105px;
   height: 28px;
   border-radius: 20px;
-  background: #0a0a0a;
+  background: #3d3d3d;
   position: absolute;
   top: 10px;
   left: 50%;
@@ -109,22 +112,21 @@ body::before {
   z-index: 20;
 }
 
-/* Both headers white now, slim padding */
 .chat-header {
   margin-top: 0;
-  height: 108px;
+  height: 96px;
   background: #ffffff;
   display: flex;
   align-items: center;
-  padding: 20px 14px 10px;
-  gap: 12px;
+  padding: 18px 14px 8px;
+  gap: 10px;
   transition: background 0.4s;
 }
 
-/* thin black border around avatar circle */
+/* avatar icon circle */
 .avatar-wrap {
-  width: 60px;
-  height: 60px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
   background: #fff;
   flex-shrink: 0;
@@ -132,7 +134,7 @@ body::before {
   display: grid;
   place-items: center;
   position: relative;
-  box-shadow: 0 0 0 2px #1a1a1a;
+  box-shadow: 0 0 0 1.5px #3d3d3d;
   transition: box-shadow 0.3s;
 }
 
@@ -145,8 +147,8 @@ body::before {
 
 .avatar-letter {
   font-weight: 700;
-  font-size: 26px;
-  color: #4f4f4f;
+  font-size: 20px;
+  color: #3d3d3d;
 }
 
 .title-wrap {
@@ -164,7 +166,7 @@ body::before {
   font-size: 14px;
   font-weight: 700;
   line-height: 1;
-  color: #1a1a1a;
+  color: #3d3d3d;
 }
 
 .title-wrap p {
@@ -177,16 +179,15 @@ body::before {
   margin-left: auto;
   border: none;
   background: transparent;
-  font-size: 26px;
+  font-size: 22px;
   cursor: pointer;
   color: #444;
   transition: color 0.2s;
   flex-shrink: 0;
 }
 
-.menu:hover { color: #000; }
+.menu:hover { color: #3d3d3d; }
 
-/* keep the original yellow gradient for chat area */
 .chat-stage {
   position: relative;
   height: 470px;
@@ -202,6 +203,22 @@ body::before {
   width: 100%;
   height: 100%;
   z-index: 1;
+}
+
+/* Makes the environmental information - "Edinburgh 22:16 p.m. 18°C" sits centred at the top of the chat stage */
+.city-time {
+  position: absolute;
+  top: 14px;
+  left: 0;
+  right: 0;
+  margin: 0;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 500;
+  color: #3d3d3d;
+  z-index: 4;
+  letter-spacing: 0.2px;
+  pointer-events: none;
 }
 
 /* floating label shown during "Thinking of You" */
@@ -227,15 +244,16 @@ body::before {
 
 .think-label.visible { opacity: 1; }
 
+/* push the message list down a bit so it doesn't overlap the centred city-time */
 .messages {
   position: relative;
   z-index: 2;
   display: flex;
   flex-direction: column;
   gap: 12px;
-  max-height: 430px;
+  max-height: 410px;
   overflow-y: auto;
-  padding: 6px;
+  padding: 50px 6px 6px;
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
