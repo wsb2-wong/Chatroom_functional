@@ -1,9 +1,11 @@
 /* Set all the colour platte at the beginning rather than inside each section */
 :root {
-  --greenblue: #86E3CE;
+  --tealblue: #86E3CE;
   --partner-white: #FFFFFF;
   --bg-yellow: #FFFAEE;
   --purple: #CCABD8;
+  --aurayellow: #FFDD94;
+  --borderred:#FA897B;
   --text: #3D3D3D;
 }
 
@@ -27,7 +29,7 @@ body::before {
   z-index: -1;
   pointer-events: none;
   background:
-    radial-gradient(circle at 16% 20%, rgba(134, 227, 206, 0.3) 0%, rgba(255, 255, 255, 0) 40%), /* style of blobs, aura, radial */
+    radial-gradient(circle at 16% 20%, rgba(134, 227, 206, 0.3) 0%, rgba(255, 255, 255, 0) 40%), /* gradient, lower saturation */
     radial-gradient(circle at 83% 24%, rgba(255, 221, 148, 0.4) 0%, rgba(255, 255, 255, 0) 42%),
     radial-gradient(circle at 52% 80%, rgba(204, 171, 216, 0.4) 0%, rgba(255, 255, 255, 0) 44%);
   transform: translate3d(0, 0, 0) scale(1.03);
@@ -40,7 +42,7 @@ body::before {
   100% { transform: translate3d(-0.6%, 0.9%, 0) scale(1.04); filter: saturate(1.02); }
 }
 
-.app { padding: 16px; }
+.app { padding: 15px; }
 
 .view-controls {
   display: flex;
@@ -51,9 +53,9 @@ body::before {
 
 /* Style in the button at top of choosing the device*/
 .view-btn, .device-tag {
-  border: 1px solid #6D6D6D;
+  border: 2px solid #6D6D6D;
   border-radius: 10px;
-  background: #FFFAEE;
+  background: #FFFFFF;
   padding: 8px 12px;
   font-size: 16px;
   cursor: pointer;
@@ -61,13 +63,14 @@ body::before {
 }
 
 .view-btn.active, .device-tag.active {
-  background: var(--greenblue);
-  border-color: var(--greenblue);
-  box-shadow: 0 2px 8px rgba(134, 227, 206, 0.4);
+  background: var(--tealblue);
+  border-color: var(--tealblue);
+  box-shadow: 0 2px 6px rgba(98, 170, 153, 0.9);
 }
 
+/* Extra hover style, with #6d6d6d border , make a difference */
 .view-btn:hover:not(.active), .device-tag:hover:not(.active) {
-  border-color: #b0b0b0;
+  border-color: #6d6d6d;
   box-shadow: 0 1px 4px rgba(0,0,0,0.08);
 }
 
@@ -86,11 +89,12 @@ body::before {
   align-items: center;
 }
 
+/* Phone screen outlook */
 .phone {
   width: 340px;
   height: 720px;
   border-radius: 28px;
-  border: 4px solid #3d3d3d;
+  border: 3px solid #3d3d3d;
   overflow: hidden;
   background: #f6f6f6;
   position: relative;
@@ -100,11 +104,12 @@ body::before {
 
 .phone:hover { box-shadow: 0 24px 42px rgba(0, 0, 0, 0.16); }
 
+/* IPhone, realistic */
 .notch {
-  width: 105px;
-  height: 28px;
+  width: 100px;
+  height: 25px;
   border-radius: 20px;
-  background: #3d3d3d;
+  background: #3D3D3D;
   position: absolute;
   top: 10px;
   left: 50%;
@@ -112,18 +117,19 @@ body::before {
   z-index: 20;
 }
 
+/* Where name, icon exist */
 .chat-header {
   margin-top: 0;
-  height: 96px;
-  background: #ffffff;
+  height: 95px;
+  background: #FFFFFF;
   display: flex;
   align-items: center;
-  padding: 18px 14px 8px;
+  padding: 35px 26px 10px;
   gap: 10px;
   transition: background 0.4s;
 }
 
-/* avatar icon circle */
+/* avatar =icon circle */
 .avatar-wrap {
   width: 48px;
   height: 48px;
@@ -134,32 +140,39 @@ body::before {
   display: grid;
   place-items: center;
   position: relative;
-  box-shadow: 0 0 0 1.5px #3d3d3d;
-  transition: box-shadow 0.3s;
+  /* overflow: visible; is default, but good to keep if you have badges */
+  transition: transform 0.3s;
 }
 
-.avatar-wrap img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+/* The AURA Gradient Border */ 
+.avatar-wrap::after {
+  content: "";
+  position: absolute;
+  top: -1.5px;    /* Matches the thickness */
+  left: -1.5px;
+  right: -1.5px;
+  bottom: -1.5px;
   border-radius: 50%;
-}
-
-.avatar-letter {
-  font-weight: 700;
-  font-size: 20px;
-  color: #3d3d3d;
+  padding: 2.5px; /* Border thickness */
+  background: linear-gradient(135deg, var(--tealblue), var(--purple),var(--aurayellow),var(--borderred));
+  -webkit-mask: /* extra */
+     linear-gradient(#fff 0 0) content-box, /* Layer 1: The Inner Circle */
+     linear-gradient(#fff 0 0); /* Layer 2: The Outer Circle */
+  -webkit-mask-composite: destination-out; /*The "Punch-Out" Logic*/ /*This creates a hollow 'donut' or ring shape.*/
+  mask-composite: exclude;
+  pointer-events: none;
 }
 
 .title-wrap {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 2px;
+  gap: 5px; /* Gap between name and activity states "Focusing" */
   min-width: 0;
   flex: 1;
 }
 
+/* name */ 
 .title-wrap h2 {
   margin: 0;
   font-family: "DM Sans", Arial, sans-serif;
@@ -169,12 +182,14 @@ body::before {
   color: #3d3d3d;
 }
 
+/* Focusing , activity , status */ 
 .title-wrap p {
   margin: 0;
   font-size: 13px;
-  color: #777;
+  color: #6D6D6D;
 }
 
+/* Three dots, cannot press but be there */ 
 .menu {
   margin-left: auto;
   border: none;
@@ -186,13 +201,17 @@ body::before {
   flex-shrink: 0;
 }
 
-.menu:hover { color: #3d3d3d; }
+/* Little hover style again */ 
+.menu:hover { color: #6D6D6D; }
+
+
+/* Starts for the background part */ 
 
 .chat-stage {
   position: relative;
   height: 470px;
   padding: 14px 12px 10px;
-  background: linear-gradient(180deg, var(--bg-yellow) 0%, #fff 100%);
+  background: linear-gradient(180deg, var(--bg-yellow) 0%, #FFFFFF 100%);
   overflow: hidden;
   transition: background 0.4s;
 }
@@ -234,7 +253,7 @@ body::before {
   padding: 6px 14px;
   font-size: 13px;
   font-weight: 500;
-  color: #444;
+  color: #3D3D3D;
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.6s;
