@@ -782,7 +782,7 @@ appState.blobScenes.device1 = new BlobScene(
 // Device 2: green blob is "my" blob (myBlobIndex = 2), purple is partner
 appState.blobScenes.device2 = new BlobScene(
   screens.device2.stage.querySelector(".blob-canvas"),
-  ["#ccabd8ab", "#d76dcbb1", "#86e3cd99", "#a8eaf1a7"],
+  ["#d1a7e0b4", "#d76dcbbc", "#53dabbb7", "#a8eaf1ae"],
   2
 );
 
