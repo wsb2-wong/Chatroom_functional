@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Couple Chatroom Prototype</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="app">
+    <div class="view-controls">
+      <button class="view-btn active" data-view="both">Both Devices</button>
+      <button class="view-btn" data-view="device1">Device 1</button>
+      <button class="view-btn" data-view="device2">Device 2</button>
+    </div>
+
+    <section class="phones" id="phonesWrap">
+      <article class="phone-shell" id="device1Shell">
+        <button class="device-tag active" data-target="device1">Device 1</button>
+        <div class="phone" id="device1">
+          <div class="notch"></div>
+          <header class="chat-header">
+            <div class="avatar-wrap">
+              <img id="girlAvatar" alt="Battery icon avatar">
+            </div>
+            <div class="title-wrap">
+              <h2>Babe</h2>
+              <p>📖 Focusing</p>
+            </div>
+            <button class="menu">⋮</button>
+          </header>
+
+          <section class="chat-stage" id="stage1">
+            <canvas class="blob-canvas"></canvas>
+            <p class="city-time" id="timeLabel1"></p>
+            <div class="messages" id="messages1"></div>
+          </section>
+
+          <section class="emotion-row" id="emotionRow1"></section>
+
+          <footer class="composer">
+            <input id="input1" type="text" placeholder="Type ..." autocomplete="off">
+            <button id="send1" class="send-btn" aria-label="Send">➤</button>
+            <button id="record1" class="record-btn" aria-label="Record">🎙</button>
+          </footer>
+          <div class="keyboard hidden" id="keyboard1"></div>
+        </div>
+      </article>
+
+      <article class="phone-shell" id="device2Shell">
+        <button class="device-tag active" data-target="device2">Device 2</button>
+        <div class="phone" id="device2">
+          <div class="notch"></div>
+          <header class="chat-header">
+            <div class="avatar-wrap avatar-letter">P</div>
+            <div class="title-wrap">
+              <h2>piggy</h2>
+              <p>📖 Focusing</p>
+            </div>
+            <button class="menu">⋮</button>
+          </header>
+
+          <section class="chat-stage" id="stage2">
+            <canvas class="blob-canvas"></canvas>
+            <p class="city-time" id="timeLabel2"></p>
+            <div class="messages" id="messages2"></div>
+          </section>
+
+          <section class="emotion-row" id="emotionRow2"></section>
+
+          <footer class="composer">
+            <input id="input2" type="text" placeholder="Type ..." autocomplete="off">
+            <button id="send2" class="send-btn" aria-label="Send">➤</button>
+            <button id="record2" class="record-btn" aria-label="Record">🎙</button>
+          </footer>
+          <div class="keyboard hidden" id="keyboard2"></div>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
