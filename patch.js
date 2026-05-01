@@ -24,7 +24,7 @@
     });
   }
 
-  // Smooth ping-pong loop for ✨ (swap right <-> left continuously)
+  // Smooth ping-pong loop for ✨ (swap right to left continuously, with slow bit, smoother)
   function patchSmoothSwapLoop() {
     if (!window.BlobScene || !window.BlobScene.prototype) return;
     if (typeof window.lerpHex !== "function") return;
@@ -33,10 +33,10 @@
     if (typeof originalLoop !== "function") return;
 
     window.BlobScene.prototype.loop = function () {
-      // Only override drawing when ✨ is active AND we explicitly enable oscillation.
+      // Only override drawing when ✨ is active & enable oscillation.
       if (this.activeEmotion !== 3 || !this._swapOscillate) {
-        // Also handle 💕 "hold big" mode (grow once, then stay big).
-        // Also handle 🌙 "hold small" mode (both blobs small + calm until next tap).
+        // Also handle 💕 "hold big" mode (grow once, then stay big)
+        // Also handle 🌙 "hold small" mode (both blobs small and calm until next tap)
         if (!this._holdBig && !this._holdSmall) {
           return originalLoop.call(this);
         }
@@ -70,7 +70,7 @@
         // Simple ping-pong value 0..1..0..1.. (slightly faster)
         var p = (Math.sin(this.t * 3.0) + 1) / 2;
 
-        // ease-in-out (same shape as script.js uses)
+        // ease-in and out (same shape as script.js uses)
         var ease =
           p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
 
@@ -112,7 +112,7 @@
         // changed: original was 0.65 (and cooler tone). now we hold around 0.58 and keep colour normal.
         var smallTarget = 0.58;
         this._holdSmallScale = this._holdSmallScale || 1.0;
-        // smaller number = slower transition into the small blob form
+        // smaller number equals to slower transition into the small blob form
         this._holdSmallScale += (smallTarget - this._holdSmallScale) * 0.02;
         scaleA = this._holdSmallScale;
         scaleB = this._holdSmallScale;
@@ -169,7 +169,7 @@
     mo.observe(document.documentElement, { childList: true, subtree: true });
   }
 
-  // 2) Keep blob movement going until next emoji tap (simple "loop" idea)
+  // 2) Keep blob movement going until next emoji tap (with the simple "loop" idea)
   function patchEmotionLooping() {
     if (typeof window.triggerEmotion !== "function") return;
     if (!window.appState || !window.appState.blobScenes) return;
@@ -179,8 +179,8 @@
     var lastIdx = { device1: null, device2: null };
 
     function stopLoop(deviceKey) {
-      if (loopTimers[deviceKey]) {
-        clearInterval(loopTimers[deviceKey]);
+      if (loopTimers[deviceKey]) { // checks if a timer exists for the given deviceKey,
+        clearInterval(loopTimers[deviceKey]); // clears the interval to stop the loop, // and resets the reference to null to prevent reuse or memory leaks.
         loopTimers[deviceKey] = null;
       }
     }
@@ -249,7 +249,7 @@
       }
 
       // Smooth + simple loop (no "crack"):
-      // - don't restart while it's mid-animation
+      // make sure don't restart while it's mid-animation
       // - only restart AFTER the animation naturally ends (activeEmotion becomes -1)
       loopTimers[deviceKey] = setInterval(function () {
         var sc = window.appState && window.appState.blobScenes ? window.appState.blobScenes[deviceKey] : null;
@@ -261,10 +261,9 @@
     };
   }
 
-  // 3) New simple flow:
-  // - user types message
-  // - user taps an emoji chip to SELECT emoji (and trigger blob movement)
-  // - user presses send/enter/keyboard send -> message sent with emoji appended at the end
+  // user types message
+  // user taps an emoji chip to SELECT emoji (and trigger blob movement)
+  // user presses send/enter/keyboard send -> message sent with emoji appended at the end
   function patchSendFlow() {
     if (!window.screens || typeof window.postMessage !== "function") return;
 
