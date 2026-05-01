@@ -113,9 +113,14 @@ function weatherIcon(code) {
 }
 
 // fetch weather from open-meteo API
+/**
+ * REFERENCE: Open-Meteo API Docs
+ * https://open-meteo.com/en/docs
+ * This function constructs the URL and fetches real-time weather data.
+ */
 async function getWeather(lat, lon) {
   var url = "https://api.open-meteo.com/v1/forecast?latitude=" + lat + "&longitude=" + lon + "&current=temperature_2m,weather_code&timezone=auto";
-  var resp = await fetch(url);
+  var resp = await fetch(url); /* TUTORIAL REFERENCE: MDN Fetch API (https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch) */
   if (!resp.ok) { throw new Error("weather fetch failed"); }
   return resp.json();
 }
@@ -136,7 +141,7 @@ function cityLabel(city, data) {
 // update chat stage background texture based on weather
 function applyWeatherBackground(deviceKey, weatherCode) {
   var stage = screens[deviceKey].stage;
-  // remove any existing weather bg
+  // remove any existing weather background
   var existing = stage.querySelector(".weather-bg");
   if (existing) { existing.remove(); }
 
@@ -218,7 +223,7 @@ function applyWeatherBackground(deviceKey, weatherCode) {
 }
 
 // update both backgrounds to match current weather
-async function refreshTimes() {
+async function refreshTimes() { // Runs it immediately when the page loads, // Runs it every 60,000ms (1 minute)
   try {
     var ams = await getWeather(52.3676, 4.9041);
     var edi = await getWeather(55.9533, -3.1883);
@@ -245,9 +250,10 @@ async function refreshTimes() {
 
 // update both time labels
 async function refreshTimes() {
-  try {
+  try { /* TUTORIAL REFERENCE: async / await (https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function) */
     var ams = await getWeather(52.3676, 4.9041);
     var edi = await getWeather(55.9533, -3.1883);
+    /* TUTORIAL REFERENCE: Intl.DateTimeFormat (https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat) */
     screens.device1.timeLabel.textContent = cityLabel("Amsterdam", ams);
     screens.device2.timeLabel.textContent = cityLabel("Edinburgh", edi);
   } catch (err) {
@@ -263,7 +269,7 @@ async function refreshTimes() {
   }
 }
 
-// build on-screen keyboard keys
+// build on-screen keyboard keys, which is extraly workload in the interface
 function makeKeyboard(el, mode) {
   mode = mode || "letters";
   var letters = ["Q","W","E","R","T","Y","U","I","O","P","A","S","D","F","G","H","J","K","L","⌫",
@@ -284,7 +290,7 @@ function makeKeyboard(el, mode) {
   });
 }
 
-// handle a key tap on the on-screen keyboard
+// handle a key tap, users could tap on the screen with the keyboard
 function tapKey(deviceKey, keyVal) {
   var inp = screens[deviceKey].input;
   if (!inp) { return; }
@@ -327,7 +333,7 @@ function revealEmotions(deviceKey) {
   screens[deviceKey].emotionRow.classList.remove("hidden");
 }
 
-// build emotion chips for a device
+// build 6 emotion chips
 function buildEmotionRow(deviceKey) {
   var row = screens[deviceKey].emotionRow;
   row.innerHTML = "";
@@ -370,8 +376,8 @@ function buildEmotionRow(deviceKey) {
 }
 
 // kick off an emotion on the SPECIFIC device that was clicked
-// Device 1 -> purple blob animates, green blob stays ambient
-// Device 2 -> green blob animates, purple blob stays ambient
+// Device 1 - purple blob animates, green blob stays ambient
+// Device 2 - green blob animates, purple blob stays ambient
 function triggerEmotion(deviceKey, emoji) {
   var idx = -1;
   for (var i = 0; i < emotionData.length; i++) {
@@ -470,11 +476,6 @@ function lerpHex(hexA, hexB, amt) {
   return "#" + rr.toString(16).padStart(2,"0") + gg.toString(16).padStart(2,"0") + bb.toString(16).padStart(2,"0");
 }
 
-// ================================================================
-// BlobScene - canvas animation
-// Each canvas renders two blobs. myBlobIndex tells which blob
-// belongs to the device we're viewing from.
-// ================================================================
 function BlobScene(canvasEl, palette, myBlobIndex) {
   this.cv = canvasEl;
   this.ctx = canvasEl.getContext("2d");
@@ -791,10 +792,6 @@ BlobScene.prototype.loop = function() {
 
   requestAnimationFrame(function() { self.loop(); });
 };
-
-// ================================================================
-// boot
-// ================================================================
 
 // Device 1: purple blob is "my" blob (myBlobIndex = 1), green is partner
 appState.blobScenes.device1 = new BlobScene(
